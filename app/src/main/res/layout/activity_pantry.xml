@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pantry_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,11 +26,63 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
+        android:id="@+id/text_pantry_count"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="@dimen/space_l"
-        android:text="@string/empty_pantry_title"
-        android:textAppearance="@style/TextAppearance.SmartPantry.Title" />
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/space_m"
+        android:paddingTop="@dimen/space_m"
+        android:paddingEnd="@dimen/space_m"
+        android:paddingBottom="@dimen/space_s"
+        android:textAppearance="@style/TextAppearance.SmartPantry.Caption"
+        tools:text="5 ingredients in your pantry" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_pantry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/list_bottom_padding"
+            tools:listitem="@layout/item_pantry" />
+
+        <LinearLayout
+            android:id="@+id/layout_empty_pantry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/space_xl"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_empty_state"
+                android:layout_height="@dimen/icon_size_empty_state"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_pantry"
+                app:tint="@color/divider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:text="@string/empty_pantry_title"
+                android:textAppearance="@style/TextAppearance.SmartPantry.Title" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="center"
+                android:text="@string/empty_pantry_message"
+                android:textAppearance="@style/TextAppearance.SmartPantry.Caption" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>
