@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Base pantry screen: app bar plus a placeholder body.
-    The RecyclerView, empty state and Add button are added in later stages,
-    once the database layer exists to feed them.
 
-    fitsSystemWindows on the app bar makes it pad itself by the height of the
-    status bar. From Android 15 onwards apps are drawn edge to edge by default,
-    so without this the title would sit underneath the clock.
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pantry_root"

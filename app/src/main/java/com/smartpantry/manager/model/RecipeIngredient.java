@@ -2,15 +2,6 @@ package com.smartpantry.manager.model;
 
 import androidx.annotation.NonNull;
 
-/**
- * One ingredient a recipe requires, i.e. one row of the
- * {@code recipe_ingredients} table.
- *
- * <p>This is deliberately a different class from {@link Ingredient}. A pantry
- * item is something the user owns; a recipe ingredient is something a recipe
- * demands. They are compared by the matching logic but they are not the same
- * thing, and keeping them separate stops the two ideas getting mixed up.</p>
- */
 public class RecipeIngredient {
 
     private long id;
@@ -19,7 +10,7 @@ public class RecipeIngredient {
     private double quantity;
     private String unit;
 
-    /** Creates a required ingredient that has not been saved yet. */
+    // Creates a required ingredient that has not been saved yet
     public RecipeIngredient(String name, double quantity, String unit) {
         this(Ingredient.NO_ID, Ingredient.NO_ID, name, quantity, unit);
     }

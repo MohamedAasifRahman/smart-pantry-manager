@@ -1,12 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Smart Pantry Manager deliberately ships a single light visual identity, so
-    there are no dark-mode overrides. The application theme in res/values uses a
-    Material 3 Light parent, which means the app renders identically whether or
-    not the device is in dark mode - and the screenshots in the report will
-    match what a marker sees on their own device.
 
-    This file is kept, empty, so it is obvious the decision was made on purpose
-    rather than forgotten.
--->
 <resources />

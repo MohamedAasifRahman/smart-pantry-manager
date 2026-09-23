@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Every piece of user-facing text lives here. No layout or Activity
-    hard-codes a string, which keeps the wording consistent and reviewable.
--->
+
 <resources>
 
     <string name="app_name">Smart Pantry Manager</string>

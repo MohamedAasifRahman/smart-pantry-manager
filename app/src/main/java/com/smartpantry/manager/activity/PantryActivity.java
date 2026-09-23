@@ -8,13 +8,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.smartpantry.manager.R;
 
-/**
- * The pantry screen and the launcher Activity of Smart Pantry Manager.
- *
- * <p>At this stage the screen only establishes the app bar and the Fresh Pantry
- * theme. The ingredient list, the add/edit flow and the bottom navigation are
- * added in later development stages, once the database layer exists.</p>
- */
+
+ // The pantry screen and the launcher Activity of Smart Pantry Manager.
+
 public class PantryActivity extends AppCompatActivity {
 
     @Override

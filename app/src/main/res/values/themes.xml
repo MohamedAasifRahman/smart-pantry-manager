@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    The single application theme, plus the shared widget styles that give the
-    app one consistent look. Cards, toolbars, buttons and text take their
-    appearance from here rather than repeating attributes in every layout file.
 
-    The parent is a Material 3 Light theme rather than DayNight: Smart Pantry
-    Manager ships one light visual identity, so the app looks the same whatever
-    the device's system setting is.
--->
 <resources>
 
     <style name="Theme.SmartPantryManager" parent="Theme.Material3.Light.NoActionBar">
@@ -87,11 +79,7 @@
         <item name="android:textColor">@color/text_secondary</item>
     </style>
 
-    <!--
-        Small rounded label used for quantities and status badges.
-        The empty parent switches off Android's implicit "inherit from the name
-        before the last dot" rule, because there is no Widget.SmartPantry style.
-    -->
+
     <style name="Widget.SmartPantry.Badge" parent="">
         <item name="android:paddingStart">@dimen/space_s</item>
         <item name="android:paddingEnd">@dimen/space_s</item>

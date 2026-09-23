@@ -6,15 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * One recipe, i.e. one row of the {@code recipes} table together with all of
- * its rows from {@code recipe_ingredients}.
- *
- * <p>Preparation steps are held as a single string with one step per line.
- * The detail screen splits and numbers them at display time. A separate steps
- * table would be more normalised, but the assignment asks for "simple
- * preparation steps" and the extra join would add no value here.</p>
- */
 public class Recipe {
 
     private long id;
@@ -24,7 +15,7 @@ public class Recipe {
     private String steps;
     private final List<RecipeIngredient> ingredients = new ArrayList<>();
 
-    /** Creates an unsaved recipe, used by the seed data. */
+    // Creates an unsaved recipe, used by the seed data.
     public Recipe(String name, String category, int prepMinutes, String steps) {
         this(Ingredient.NO_ID, name, category, prepMinutes, steps);
     }
@@ -69,7 +60,7 @@ public class Recipe {
         this.prepMinutes = prepMinutes;
     }
 
-    /** @return all preparation steps as one string, one step per line. */
+
     public String getSteps() {
         return steps;
     }
@@ -78,7 +69,7 @@ public class Recipe {
         this.steps = steps;
     }
 
-    /** @return the steps split into individual lines, ready to be numbered. */
+
     public List<String> getStepList() {
         List<String> stepList = new ArrayList<>();
         if (steps == null) {
@@ -93,7 +84,7 @@ public class Recipe {
         return stepList;
     }
 
-    /** @return the required ingredients, as an unmodifiable list. */
+
     public List<RecipeIngredient> getIngredients() {
         return Collections.unmodifiableList(ingredients);
     }
@@ -102,7 +93,7 @@ public class Recipe {
         ingredients.add(ingredient);
     }
 
-    /** Convenience used by the seed data so each recipe reads as one statement. */
+
     public Recipe requires(String name, double quantity, String unit) {
         addIngredient(new RecipeIngredient(name, quantity, unit));
         return this;

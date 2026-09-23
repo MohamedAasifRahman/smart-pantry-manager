@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    The units the user may choose from. Restricting the form to this fixed
-    list is what stops unusable units ("packet", "bit") reaching the matching
-    logic, and it keeps the pantry and the seeded recipes speaking the same
-    language.
--->
+
 <resources>
 
     <string-array name="units">
