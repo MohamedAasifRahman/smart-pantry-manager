@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The units the user may choose from. Restricting the form to this fixed
+    list is what stops unusable units ("packet", "bit") reaching the matching
+    logic, and it keeps the pantry and the seeded recipes speaking the same
+    language.
+-->
+<resources>
+
+    <string-array name="units">
+        <item>g</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>l</item>
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>cup</item>
+        <item>pcs</item>
+        <item>slice</item>
+        <item>clove</item>
+    </string-array>
+
+    <string-array name="expiry_threshold_labels">
+        <item>3 days</item>
+        <item>7 days</item>
+        <item>14 days</item>
+    </string-array>
+
+</resources>

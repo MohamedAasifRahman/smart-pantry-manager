@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Fresh Pantry palette.
+    Every colour used anywhere in the app is declared here once, so the whole
+    application can be re-themed from a single file.
+-->
 <resources>
+
+    <!-- Primary: deep teal. Used for app bars, primary buttons and the selected tab. -->
+    <color name="pantry_teal">#0F6E64</color>
+    <color name="pantry_teal_dark">#0A4F48</color>
+    <color name="pantry_teal_light">#E3F0EE</color>
+
+    <!-- Accent: warm amber. Used for the add button and "expiring soon" badges. -->
+    <color name="pantry_amber">#F2A33C</color>
+    <color name="pantry_amber_light">#FDF0DC</color>
+
+    <!-- Surfaces -->
+    <color name="background">#F6F5F1</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="divider">#E4E7E5</color>
+
+    <!-- Text -->
+    <color name="text_primary">#1C2523</color>
+    <color name="text_secondary">#5E6C68</color>
+
+    <!-- Status colours -->
+    <color name="error">#B3261E</color>
+    <color name="error_light">#FBE5E3</color>
+    <color name="success">#2E7D5B</color>
+    <color name="success_light">#E3F1EA</color>
+
+    <!-- Plain black and white, kept from the project template -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
 </resources>

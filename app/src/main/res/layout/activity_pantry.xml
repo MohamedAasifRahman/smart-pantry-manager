@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Base pantry screen: app bar plus a placeholder body.
+    The RecyclerView, empty state and Add button are added in later stages,
+    once the database layer exists to feed them.
+
+    fitsSystemWindows on the app bar makes it pad itself by the height of the
+    status bar. From Android 15 onwards apps are drawn edge to edge by default,
+    so without this the title would sit underneath the clock.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pantry_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pantry_teal"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.SmartPantry.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/title_pantry" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="@dimen/space_l"
+        android:text="@string/empty_pantry_title"
+        android:textAppearance="@style/TextAppearance.SmartPantry.Title" />
+
+</LinearLayout>

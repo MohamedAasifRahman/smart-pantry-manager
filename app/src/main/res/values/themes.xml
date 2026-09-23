@@ -1,9 +1,104 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The single application theme, plus the shared widget styles that give the
+    app one consistent look. Cards, toolbars, buttons and text take their
+    appearance from here rather than repeating attributes in every layout file.
+
+    The parent is a Material 3 Light theme rather than DayNight: Smart Pantry
+    Manager ships one light visual identity, so the app looks the same whatever
+    the device's system setting is.
+-->
+<resources>
+
+    <style name="Theme.SmartPantryManager" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary: deep teal -->
+        <item name="colorPrimary">@color/pantry_teal</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/pantry_teal_light</item>
+        <item name="colorOnPrimaryContainer">@color/pantry_teal_dark</item>
+
+        <!-- Secondary: warm amber -->
+        <item name="colorSecondary">@color/pantry_amber</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="colorSecondaryContainer">@color/pantry_amber_light</item>
+        <item name="colorOnSecondaryContainer">@color/text_primary</item>
+
+        <!-- Surfaces and text -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/pantry_teal_light</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/divider</item>
+
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="android:windowBackground">@color/background</item>
+
+        <!-- Every MaterialCardView in the app picks up our card style. -->
+        <item name="materialCardViewStyle">@style/Widget.SmartPantry.CardView</item>
     </style>
 
-    <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager" />
+    <!-- Cards: one corner radius and one elevation everywhere. -->
+    <style name="Widget.SmartPantry.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/corner_radius_card</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <style name="Widget.SmartPantry.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/pantry_teal</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/pantry_teal_light</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
+    <style name="Widget.SmartPantry.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/pantry_teal</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">@dimen/corner_radius_small</item>
+        <item name="android:paddingTop">@dimen/space_m</item>
+        <item name="android:paddingBottom">@dimen/space_m</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <!-- Type scale -->
+    <style name="TextAppearance.SmartPantry.Headline" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">@dimen/text_headline</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.SmartPantry.Title" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.SmartPantry.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="TextAppearance.SmartPantry.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <!--
+        Small rounded label used for quantities and status badges.
+        The empty parent switches off Android's implicit "inherit from the name
+        before the last dot" rule, because there is no Widget.SmartPantry style.
+    -->
+    <style name="Widget.SmartPantry.Badge" parent="">
+        <item name="android:paddingStart">@dimen/space_s</item>
+        <item name="android:paddingEnd">@dimen/space_s</item>
+        <item name="android:paddingTop">@dimen/space_xs</item>
+        <item name="android:paddingBottom">@dimen/space_xs</item>
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
