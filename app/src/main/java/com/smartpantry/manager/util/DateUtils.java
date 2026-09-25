@@ -15,6 +15,9 @@ public final class DateUtils {
 
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
+    // Only for showing a date on screen, never for storing one.
+    private static final String DISPLAY_PATTERN = "d MMM yyyy";
+
     private static final int EARLIEST_YEAR = 2000;
     private static final int LATEST_YEAR = 2100;
     private static final long MILLIS_PER_DAY = 24L * 60L * 60L * 1000L;
@@ -25,6 +28,16 @@ public final class DateUtils {
     @NonNull
     public static String format(@NonNull Calendar calendar) {
         return createFormat().format(calendar.getTime());
+    }
+
+    // "2026-09-26" becomes "26 Sep 2026" for the pantry cards
+    @NonNull
+    public static String formatForDisplay(@Nullable String isoDate) {
+        Date date = parse(isoDate);
+        if (date == null) {
+            return isoDate == null ? "" : isoDate;
+        }
+        return new SimpleDateFormat(DISPLAY_PATTERN, Locale.getDefault()).format(date);
     }
 
     // Returns null when the text is not a valid date.

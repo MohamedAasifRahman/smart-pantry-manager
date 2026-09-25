@@ -69,7 +69,11 @@
     <string name="badge_strict_match">Strict Match ✓</string>
     <string name="badge_expired">Expired</string>
     <string name="badge_expires_today">Expires today</string>
-    <string name="badge_expires_in_days">Expires in %1$d days</string>
+    <!-- A quantity string, so one day reads "day" and the rest read "days" -->
+    <plurals name="badge_expires_in_days">
+        <item quantity="one">Expires in %1$d day</item>
+        <item quantity="other">Expires in %1$d days</item>
+    </plurals>
 
     <!-- Recipes -->
     <string name="recipes_count_one">1 recipe you can make right now</string>

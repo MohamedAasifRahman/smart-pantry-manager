@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.logic.ExpiryStatus;
 import com.smartpantry.manager.model.Ingredient;
+import com.smartpantry.manager.util.DateUtils;
 import com.smartpantry.manager.util.QuantityFormatter;
 import com.smartpantry.manager.util.SettingsManager;
 
@@ -68,7 +69,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         return new PantryViewHolder(itemView);
     }
 
-    // Called when an existing row view must show a different ingredient.
+    // Called when an existing row view must show a different ingredient
     @Override
     public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
@@ -82,9 +83,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         return ingredients.size();
     }
 
-    // Holds one row's views so they are looked up once instead of on every scroll frame.
+    // Holds one row's views so they are looked up once instead of on every scroll frame
 
-    // Public because onCreateViewHolder hands one back to the RecyclerView.
     public static class PantryViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView nameView;
@@ -120,7 +120,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             Context context = itemView.getContext();
 
             if (ingredient.hasExpiryDate()) {
-                expiryView.setText(context.getString(R.string.expiry_on, ingredient.getExpiryDate()));
+                expiryView.setText(context.getString(R.string.expiry_on,
+                        DateUtils.formatForDisplay(ingredient.getExpiryDate())));
                 expiryView.setVisibility(View.VISIBLE);
             } else {
                 expiryView.setVisibility(View.GONE);
@@ -136,7 +137,10 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
                             R.drawable.bg_badge_amber, R.color.text_primary);
                     break;
                 case SOON:
-                    showBadge(context.getString(R.string.badge_expires_in_days, status.getDays()),
+                    // A plurals resource, so "1 day" and "2 days" both read correctly
+                    showBadge(context.getResources().getQuantityString(
+                                    R.plurals.badge_expires_in_days,
+                                    status.getDays(), status.getDays()),
                             R.drawable.bg_badge_amber, R.color.text_primary);
                     break;
                 default:
