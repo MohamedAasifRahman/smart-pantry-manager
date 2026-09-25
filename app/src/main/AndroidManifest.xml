@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Smart Pantry Manager.
 
-    Note that this application declares NO permissions at all: no internet,
-    no location and no storage. The assignment places Google Maps, mapping
-    SDKs and GPS/location services explicitly out of scope, and the simplest
-    proof of that is a manifest with nothing to grant.
--->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -32,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.AddEditIngredientActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.PantryActivity"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

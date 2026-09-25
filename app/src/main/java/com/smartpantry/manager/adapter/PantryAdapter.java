@@ -17,14 +17,16 @@ import com.smartpantry.manager.util.QuantityFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-// Binds the pantry list to the RecyclerView. Last step of the chain:
-// SQLite -> DatabaseHelper -> List<Ingredient> -> PantryAdapter -> RecyclerView.
-// The adapter holds no database code; it is given a finished list and only
-// decides how one row looks.
+// Binds the pantry list to the RecyclerView.
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
 
     // The adapter reports what the user tapped; the Activity decides what to do.
     public interface OnIngredientActionListener {
+
+        // The row itself was tapped, meaning open this one for editing.
+        void onEditRequested(@NonNull Ingredient ingredient);
+
+        // The delete icon on the row was tapped.
         void onDeleteRequested(@NonNull Ingredient ingredient);
     }
 
@@ -64,6 +66,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     }
 
     // Holds one row's views so they are looked up once instead of on every scroll frame.
+
     // Public because onCreateViewHolder hands one back to the RecyclerView.
     public static class PantryViewHolder extends RecyclerView.ViewHolder {
 
@@ -93,6 +96,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
                 expiryView.setVisibility(View.GONE);
             }
 
+            itemView.setOnClickListener(view -> listener.onEditRequested(ingredient));
             deleteButton.setOnClickListener(view -> listener.onDeleteRequested(ingredient));
         }
     }

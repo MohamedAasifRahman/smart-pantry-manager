@@ -83,6 +83,18 @@
 
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_add_ingredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/space_m"
+            android:text="@string/action_add_ingredient"
+            android:textColor="@color/text_primary"
+            app:backgroundTint="@color/pantry_amber"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/text_primary" />
+
     </FrameLayout>
 
 </LinearLayout>

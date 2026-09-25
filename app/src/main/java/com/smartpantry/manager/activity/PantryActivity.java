@@ -1,9 +1,12 @@
 package com.smartpantry.manager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -18,6 +21,7 @@ import com.smartpantry.manager.R;
 import com.smartpantry.manager.adapter.PantryAdapter;
 import com.smartpantry.manager.database.DatabaseHelper;
 import com.smartpantry.manager.model.Ingredient;
+import com.smartpantry.manager.util.IntentKeys;
 
 import java.util.List;
 
@@ -33,6 +37,20 @@ public class PantryActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private View emptyStateView;
     private TextView countLabel;
+
+    // Receives the confirmation message the add/edit screen sends back
+
+    // Data also travels in both directions between the two Activities.
+    private final ActivityResultLauncher<Intent> addEditLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    int messageResId = result.getData().getIntExtra(IntentKeys.EXTRA_RESULT_MESSAGE, 0);
+                    if (messageResId != 0) {
+                        showMessage(messageResId);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +71,8 @@ public class PantryActivity extends AppCompatActivity
         pantryAdapter = new PantryAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(pantryAdapter);
+
+        findViewById(R.id.fab_add_ingredient).setOnClickListener(view -> openAddForm());
     }
 
     // onResume runs every time the screen returns to the foreground, so the
@@ -83,6 +103,20 @@ public class PantryActivity extends AppCompatActivity
         } else {
             countLabel.setText(getString(R.string.pantry_count_many, ingredientCount));
         }
+    }
+
+    // No id in the Intent means the form opens in add mode.
+    private void openAddForm() {
+        addEditLauncher.launch(new Intent(this, AddEditIngredientActivity.class));
+    }
+
+    // Only the id travels in the Intent. The form loads the ingredient from the
+    // database itself, so there is never a second copy that could go out of date.
+    @Override
+    public void onEditRequested(@NonNull Ingredient ingredient) {
+        Intent intent = new Intent(this, AddEditIngredientActivity.class);
+        intent.putExtra(IntentKeys.EXTRA_INGREDIENT_ID, ingredient.getId());
+        addEditLauncher.launch(intent);
     }
 
     // Always confirm before anything is removed from the database.
