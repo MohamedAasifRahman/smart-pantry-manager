@@ -42,6 +42,19 @@
                 tools:text="Expires 2026-10-01"
                 tools:visibility="visible" />
 
+            <!-- Background and text colour are set in the adapter, because they
+                 depend on whether the item is expired or only expiring soon. -->
+            <TextView
+                android:id="@+id/text_expiry_badge"
+                style="@style/Widget.SmartPantry.Badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:visibility="gone"
+                tools:background="@drawable/bg_badge_amber"
+                tools:text="Expires in 2 days"
+                tools:visibility="visible" />
+
         </LinearLayout>
 
         <TextView

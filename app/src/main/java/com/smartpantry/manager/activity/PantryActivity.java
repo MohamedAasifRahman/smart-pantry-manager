@@ -59,7 +59,7 @@ public class PantryActivity extends BaseNavigationActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
 
-        // The theme has no action bar of its own
+        // The theme has no action bar of its own so the Material toolbar becomes the Activity's app bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,8 +79,9 @@ public class PantryActivity extends BaseNavigationActivity
         setUpBottomNavigation(R.id.nav_pantry);
     }
 
-    // onResume runs every time the screen returns to the foreground, so the
-    // list refreshes itself after the user comes back from any other screen.
+    // onResume runs every time the screen returns to the foreground
+
+    // The list refreshes itself after the user comes back from any other screen.
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,6 +106,11 @@ public class PantryActivity extends BaseNavigationActivity
     // Reads the pantry from the database and hands it to the adapter.
     private void loadPantry() {
         List<Ingredient> ingredients = databaseHelper.getAllIngredients();
+
+        // Read fresh each time
+        pantryAdapter.setExpiryAlertSettings(
+                settings.isExpiryAlertsEnabled(), settings.getExpiryThresholdDays());
+
         pantryAdapter.setIngredients(ingredients);
         showListOrEmptyState(ingredients.size());
     }
