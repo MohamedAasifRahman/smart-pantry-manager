@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.smartpantry.manager.adapter.PantryAdapter;
 import com.smartpantry.manager.database.DatabaseHelper;
 import com.smartpantry.manager.model.Ingredient;
 import com.smartpantry.manager.util.IntentKeys;
+import com.smartpantry.manager.util.SettingsManager;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class PantryActivity extends BaseNavigationActivity
         implements PantryAdapter.OnIngredientActionListener {
 
     private DatabaseHelper databaseHelper;
+    private SettingsManager settings;
     private PantryAdapter pantryAdapter;
 
     private RecyclerView recyclerView;
@@ -56,12 +59,12 @@ public class PantryActivity extends BaseNavigationActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
 
-        // The theme has no action bar of its own, so the Material toolbar in
-        // the layout becomes this Activity's app bar.
+        // The theme has no action bar of its own
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         databaseHelper = new DatabaseHelper(this);
+        settings = new SettingsManager(this);
 
         recyclerView = findViewById(R.id.recycler_pantry);
         emptyStateView = findViewById(R.id.layout_empty_pantry);
@@ -81,7 +84,22 @@ public class PantryActivity extends BaseNavigationActivity
     @Override
     protected void onResume() {
         super.onResume();
+        applyDisplayName();
         loadPantry();
+    }
+
+    // The name saved in Settings appears in the app bar
+    private void applyDisplayName() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
+        String displayName = settings.getDisplayName();
+        if (displayName.isEmpty()) {
+            actionBar.setTitle(R.string.title_pantry);
+        } else {
+            actionBar.setTitle(getString(R.string.pantry_title_with_name, displayName));
+        }
     }
 
     // Reads the pantry from the database and hands it to the adapter.
@@ -111,8 +129,7 @@ public class PantryActivity extends BaseNavigationActivity
         addEditLauncher.launch(new Intent(this, AddEditIngredientActivity.class));
     }
 
-    // Only the id travels in the Intent. The form loads the ingredient from the
-    // database itself, so there is never a second copy that could go out of date.
+    // Only the id travels in the Intent
     @Override
     public void onEditRequested(@NonNull Ingredient ingredient) {
         Intent intent = new Intent(this, AddEditIngredientActivity.class);

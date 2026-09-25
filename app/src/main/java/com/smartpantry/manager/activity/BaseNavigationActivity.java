@@ -33,6 +33,10 @@ public abstract class BaseNavigationActivity extends AppCompatActivity {
                 openTab(SuggestedRecipesActivity.class);
                 return true;
             }
+            if (itemId == R.id.nav_settings) {
+                openTab(SettingsActivity.class);
+                return true;
+            }
             return false;
         });
     }

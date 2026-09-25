@@ -30,4 +30,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- Settings switch -->
+    <color name="switch_track_on">#6FA8A1</color>
+    <color name="switch_track_off">#B9C0BE</color>
+
 </resources>
