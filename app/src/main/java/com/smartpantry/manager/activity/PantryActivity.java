@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +27,7 @@ import java.util.List;
 
  // The pantry screen and the launcher Activity of Smart Pantry Manager.
 
-public class PantryActivity extends AppCompatActivity
+public class PantryActivity extends BaseNavigationActivity
         implements PantryAdapter.OnIngredientActionListener {
 
     private DatabaseHelper databaseHelper;
@@ -73,6 +72,8 @@ public class PantryActivity extends AppCompatActivity
         recyclerView.setAdapter(pantryAdapter);
 
         findViewById(R.id.fab_add_ingredient).setOnClickListener(view -> openAddForm());
+
+        setUpBottomNavigation(R.id.nav_pantry);
     }
 
     // onResume runs every time the screen returns to the foreground, so the

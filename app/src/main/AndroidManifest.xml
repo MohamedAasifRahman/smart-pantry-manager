@@ -32,6 +32,16 @@
             android:parentActivityName=".activity.PantryActivity"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".activity.SuggestedRecipesActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".activity.RecipeDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.SuggestedRecipesActivity" />
+
     </application>
 
 </manifest>

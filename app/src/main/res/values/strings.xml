@@ -78,6 +78,7 @@
     <string name="recipe_ingredient_count">%1$d ingredients</string>
     <string name="label_ingredients">Ingredients</string>
     <string name="label_method">Method</string>
+    <string name="recipe_step">%1$d. %2$s</string>
     <string name="recipe_detail_banner">You have everything you need for this recipe.</string>
 
     <!-- Settings -->

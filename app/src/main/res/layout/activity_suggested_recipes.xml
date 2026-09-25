@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pantry_root"
+    android:id="@+id/recipes_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -21,12 +21,12 @@
             style="@style/Widget.SmartPantry.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/title_pantry" />
+            app:title="@string/title_suggested_recipes" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:id="@+id/text_pantry_count"
+        android:id="@+id/text_recipes_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/space_m"
@@ -34,7 +34,7 @@
         android:paddingEnd="@dimen/space_m"
         android:paddingBottom="@dimen/space_s"
         android:textAppearance="@style/TextAppearance.SmartPantry.Caption"
-        tools:text="5 ingredients in your pantry" />
+        tools:text="4 recipes you can make right now" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -42,15 +42,15 @@
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_pantry"
+            android:id="@+id/recycler_recipes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/list_bottom_padding"
-            tools:listitem="@layout/item_pantry" />
+            android:paddingBottom="@dimen/space_m"
+            tools:listitem="@layout/item_recipe" />
 
         <LinearLayout
-            android:id="@+id/layout_empty_pantry"
+            android:id="@+id/layout_empty_recipes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -63,14 +63,15 @@
                 android:layout_width="@dimen/icon_size_empty_state"
                 android:layout_height="@dimen/icon_size_empty_state"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_pantry"
+                android:src="@drawable/ic_recipes"
                 app:tint="@color/divider" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
-                android:text="@string/empty_pantry_title"
+                android:gravity="center"
+                android:text="@string/empty_recipes_title"
                 android:textAppearance="@style/TextAppearance.SmartPantry.Title" />
 
             <TextView
@@ -78,22 +79,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_s"
                 android:gravity="center"
-                android:text="@string/empty_pantry_message"
+                android:text="@string/empty_recipes_message"
                 android:textAppearance="@style/TextAppearance.SmartPantry.Caption" />
 
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_add_ingredient"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/space_m"
-            android:text="@string/action_add_ingredient"
-            android:textColor="@color/text_primary"
-            app:backgroundTint="@color/pantry_amber"
-            app:icon="@drawable/ic_add"
-            app:iconTint="@color/text_primary" />
 
     </FrameLayout>
 
