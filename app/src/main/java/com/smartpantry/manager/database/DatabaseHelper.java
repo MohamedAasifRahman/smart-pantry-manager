@@ -12,9 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.smartpantry.manager.model.Ingredient;
+import com.smartpantry.manager.model.Recipe;
+import com.smartpantry.manager.model.RecipeIngredient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Creates the SQLite database and performs every read and write the app needs.
 
@@ -24,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     private static final String DATABASE_NAME = "smart_pantry.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String SQL_CREATE_PANTRY =
             "CREATE TABLE " + DatabaseContract.Pantry.TABLE_NAME + " ("
@@ -79,6 +83,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_RECIPES);
         db.execSQL(SQL_CREATE_RECIPE_INGREDIENTS);
         db.execSQL(SQL_CREATE_RECIPE_INGREDIENTS_INDEX);
+        seedRecipes(db);
+    }
+
+    // Writes the 20 bundled recipes and their required ingredients.
+
+    private void seedRecipes(@NonNull SQLiteDatabase db) {
+        List<Recipe> recipes = RecipeSeedData.buildSeedRecipes();
+        db.beginTransaction();
+        try {
+            for (Recipe recipe : recipes) {
+                ContentValues recipeValues = new ContentValues();
+                recipeValues.put(DatabaseContract.Recipes.COLUMN_NAME, recipe.getName());
+                recipeValues.put(DatabaseContract.Recipes.COLUMN_CATEGORY, recipe.getCategory());
+                recipeValues.put(DatabaseContract.Recipes.COLUMN_PREP_MINUTES, recipe.getPrepMinutes());
+                recipeValues.put(DatabaseContract.Recipes.COLUMN_STEPS, recipe.getSteps());
+
+                long recipeId = db.insert(DatabaseContract.Recipes.TABLE_NAME, null, recipeValues);
+                if (recipeId == -1) {
+                    Log.e(TAG, "Could not seed recipe " + recipe.getName());
+                    continue;
+                }
+
+                for (RecipeIngredient required : recipe.getIngredients()) {
+                    ContentValues ingredientValues = new ContentValues();
+                    ingredientValues.put(DatabaseContract.RecipeIngredients.COLUMN_RECIPE_ID, recipeId);
+                    ingredientValues.put(DatabaseContract.RecipeIngredients.COLUMN_NAME, required.getName());
+                    ingredientValues.put(DatabaseContract.RecipeIngredients.COLUMN_QUANTITY, required.getQuantity());
+                    ingredientValues.put(DatabaseContract.RecipeIngredients.COLUMN_UNIT, required.getUnit());
+                    db.insert(DatabaseContract.RecipeIngredients.TABLE_NAME, null, ingredientValues);
+                }
+            }
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Seeding the recipe collection failed", e);
+        } finally {
+            db.endTransaction();
+        }
     }
 
     // The schema stays at version 1 for this submission, so no migration is written yet.
@@ -188,6 +229,113 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Loads every recipe with the ingredients it requires
+
+    @NonNull
+    public List<Recipe> getAllRecipes() {
+        List<Recipe> recipes = new ArrayList<>();
+        Map<Long, List<RecipeIngredient>> ingredientsByRecipe = getAllRecipeIngredients();
+
+        Cursor cursor = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            cursor = db.query(
+                    DatabaseContract.Recipes.TABLE_NAME,
+                    null, null, null, null, null,
+                    DatabaseContract.Recipes.COLUMN_NAME + " COLLATE NOCASE ASC");
+            while (cursor.moveToNext()) {
+                Recipe recipe = readRecipe(cursor);
+                List<RecipeIngredient> required = ingredientsByRecipe.get(recipe.getId());
+                if (required != null) {
+                    for (RecipeIngredient ingredient : required) {
+                        recipe.addIngredient(ingredient);
+                    }
+                }
+                recipes.add(recipe);
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Could not read recipes", e);
+        } finally {
+            closeQuietly(cursor);
+        }
+        return recipes;
+    }
+
+    // One recipe with its ingredients, or null when the id is unknown.
+    @Nullable
+    public Recipe getRecipeById(long id) {
+        Recipe recipe = null;
+        Cursor cursor = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            cursor = db.query(
+                    DatabaseContract.Recipes.TABLE_NAME,
+                    null,
+                    DatabaseContract.Recipes.COLUMN_ID + " = ?",
+                    new String[]{String.valueOf(id)},
+                    null, null, null);
+            if (cursor.moveToFirst()) {
+                recipe = readRecipe(cursor);
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Could not read recipe " + id, e);
+        } finally {
+            closeQuietly(cursor);
+        }
+
+        if (recipe == null) {
+            return null;
+        }
+
+        Cursor ingredientCursor = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            ingredientCursor = db.query(
+                    DatabaseContract.RecipeIngredients.TABLE_NAME,
+                    null,
+                    DatabaseContract.RecipeIngredients.COLUMN_RECIPE_ID + " = ?",
+                    new String[]{String.valueOf(id)},
+                    null, null,
+                    DatabaseContract.RecipeIngredients.COLUMN_ID + " ASC");
+            while (ingredientCursor.moveToNext()) {
+                recipe.addIngredient(readRecipeIngredient(ingredientCursor));
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Could not read ingredients for recipe " + id, e);
+        } finally {
+            closeQuietly(ingredientCursor);
+        }
+        return recipe;
+    }
+
+    // Every recipe ingredient, grouped by the recipe it belongs to.
+    @NonNull
+    private Map<Long, List<RecipeIngredient>> getAllRecipeIngredients() {
+        Map<Long, List<RecipeIngredient>> grouped = new HashMap<>();
+        Cursor cursor = null;
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            cursor = db.query(
+                    DatabaseContract.RecipeIngredients.TABLE_NAME,
+                    null, null, null, null, null,
+                    DatabaseContract.RecipeIngredients.COLUMN_ID + " ASC");
+            while (cursor.moveToNext()) {
+                RecipeIngredient ingredient = readRecipeIngredient(cursor);
+                List<RecipeIngredient> forRecipe = grouped.get(ingredient.getRecipeId());
+                if (forRecipe == null) {
+                    forRecipe = new ArrayList<>();
+                    grouped.put(ingredient.getRecipeId(), forRecipe);
+                }
+                forRecipe.add(ingredient);
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Could not read recipe ingredients", e);
+        } finally {
+            closeQuietly(cursor);
+        }
+        return grouped;
+    }
+
     // Model object to column values.
     private ContentValues toContentValues(@NonNull Ingredient ingredient) {
         ContentValues values = new ContentValues();
@@ -211,6 +359,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseContract.Pantry.COLUMN_QUANTITY)),
                 cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Pantry.COLUMN_UNIT)),
                 cursor.isNull(expiryIndex) ? null : cursor.getString(expiryIndex));
+    }
+
+    // Current cursor row to a recipe, without its ingredients.
+    private Recipe readRecipe(@NonNull Cursor cursor) {
+        return new Recipe(
+                cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.Recipes.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Recipes.COLUMN_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Recipes.COLUMN_CATEGORY)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Recipes.COLUMN_PREP_MINUTES)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Recipes.COLUMN_STEPS)));
+    }
+
+    // Current cursor row to a required recipe ingredient.
+    private RecipeIngredient readRecipeIngredient(@NonNull Cursor cursor) {
+        return new RecipeIngredient(
+                cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.RecipeIngredients.COLUMN_ID)),
+                cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.RecipeIngredients.COLUMN_RECIPE_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.RecipeIngredients.COLUMN_NAME)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseContract.RecipeIngredients.COLUMN_QUANTITY)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.RecipeIngredients.COLUMN_UNIT)));
     }
 
     private void closeQuietly(@Nullable Cursor cursor) {
